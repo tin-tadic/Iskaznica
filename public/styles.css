@@ -1,0 +1,100 @@
+#profilePicDiv {
+    margin: auto;
+}
+#profilePic {
+    max-width: 100%;
+    max-height: 500px;
+}
+#imePrezime {
+    margin-top: 15px;
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+.vrijednost {
+    margin-top: -5%;
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+.centerMe {
+    text-align: center;
+}
+
+.padMe {
+    margin-top: 5%;
+}
+
+.rightSide {
+    margin: auto;
+    padding: 0;
+}
+.leftSide{
+    padding: 0;
+}
+
+#nePostojiText {
+    text-align: center;
+    margin-top: 10%;
+    font-size: 30px;
+}
+#notFound {
+    max-width: 50%;
+    max-height: 50%;
+}
+#centerMeNotFound {
+    text-align: center;
+}
+
+#newCardHeader {
+    font-size: 25px;
+}
+#newCardHeaderDivider {
+    background-color: #52adf2ad;
+}
+#newCardForm {
+    padding-top: 16px;
+}
+.error-wrapper {
+    margin-bottom: 30px;
+}
+.addCardError {
+    margin: 5px;
+    color: red;
+}
+.unosPodataka {
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 20px;
+    border: 1px solid #5598bc;
+    width: 50%;
+}
+.label {
+    margin-top: -10px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+#slikaUnos {
+    max-width: 200px;
+    font-size: 15px;
+}
+.addCardBottom {
+    margin-bottom: 50px;
+}
+#napraviIskaznicu {
+    margin-bottom: 0;
+}
+.dugmadi {
+    background: #52adf2;
+    color: white;
+    border: 1px solid #5598bc;
+}
+.unesiText {
+        text-align: center;
+    }
+    ::-webkit-input-placeholder {
+        text-align: center;
+    }
+    :-moz-placeholder {
+        text-align: center;
+    }

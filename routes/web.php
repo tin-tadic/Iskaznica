@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\CardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,10 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function() {
+    return view('home');
 });
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/addCard', function() {
+    return view('addCard');
+})->middleware('auth');
+
+Route::post('/dodajIskaznicu', [CardController::class, 'dodajIskaznicu']);
+
+Route::get('/viewProfile/{brIskaznice}', [CardController::class, 'dohvatiProfil'])->where('brIskaznice', '[0-9]+')->name('viewProfile');
