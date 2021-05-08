@@ -6,11 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Card;
 use Illuminate\Support\Facades\DB;
 use Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 
 
 class CardController extends Controller
 {
     public function dodajIskaznicu(Request $request) {
+
         $rules = [
             'imePrezime' => ['required', 'min:2', 'max: 50'],
             'medij' => ['required', 'min:2', 'max:50'],
@@ -54,10 +57,14 @@ class CardController extends Controller
             'duznost' => $request->input('duznost'),
             'vazi_do' => $request->input('vazenje'),
             'slika' => $name,
-            'qr_kod' => 'TODO in controller'
+            'qr_kod' => 'Ako vidite ovu poruku dulje od 1 minute doslo je do greske.',
         ]);
         $request->image->storeAs('slikeKorisnika', $name, 'public');
 
+        //QR name generated with time(), needs to be stored because it is used twice
+        $qr_name = auth()->user()->id . '-' . time() . '.svg';
+        QrCode::generate('localhost:8000/viewProfile/' . $newCardId->id, '../public/storage/QR_kodovi/' . $qr_name);
+        DB::table('cards')->where('id', $newCardId->id)->update(['qr_kod' => $qr_name]);
 
         return redirect()->route('viewProfile', ['brIskaznice' => $newCardId->id]);
     }
