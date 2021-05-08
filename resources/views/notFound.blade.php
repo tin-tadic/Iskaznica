@@ -6,11 +6,11 @@
 <div class="container">
     <div class="row justify-content-center padMe">
 
-        <div>
-            <div id="centerMeNotFound">
+        <div class="card" id="notFoundMain">
+            <div class="card-body" id="centerMeNotFound">
                 <img id="notFound" src="/storage/slikeKorisnika/notFound.jpg" alt="profil ne postoji" />
+                <p id="nePostojiText">Stranica nije pronađena</p>
             </div>
-            <p id="nePostojiText">Stranica nije pronađena</p>
         </div>
 
     </div>

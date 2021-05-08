@@ -85,9 +85,9 @@ class CardController extends Controller
             }
             
             
-            return view("viewProfile", compact('slika', 'id', 'medij', 'duznost', 'vazi_do'));
+            return view("viewProfile", compact('slika', 'imePrezime', 'id', 'medij', 'duznost', 'vazi_do'));
         } else {
-            return view("profileNotFound");
+            return view("notFound");
         }
     }
 

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function test() {
-        return "Called UserController@test successfully";
-    }
+    // public function pretragaKorisnika() {
+    //     dd("TODO");
+    // }
 }
