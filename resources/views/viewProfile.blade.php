@@ -13,40 +13,52 @@
                     <img id="profilePic" src="/storage/slikeKorisnika/{{ $slika }}" alt="profilna slika" />
                 </div>
                 <p id="imePrezime">{{ $imePrezime }}</p>
+
+                @if (Auth::user() && Auth::user()->role > 0)
+                    
+                <div id="adminButtonUserPageDiv">
+                    <a class="adminButtonUserPage" id="editCardButton" href="{{ route('editProfile', $id) }}">Edit</a>
+                    <a class="adminButtonUserPage" href="{{ route('deleteProfile', ['brIskaznice' => $id]) }}" id="terminateCardButton" onclick="event.preventDefault(); document.getElementById('deleteCard-form').submit();">
+                                Ukini
+                            </a>
+                    <form id="deleteCard-form" action="{{ route('deleteProfile', ['brIskaznice' => $id]) }}" method="POST">
+                        @csrf
+                    </form>
+                </div>
+                @endif
+
             </div>
 
         </div>
 
         <div class="col-md-6 rightSide">
+        <div id="podatci">
+            <div class="centerMe">
+                <p class="poddioIskaznice">Broj Iskaznice</p>
+                <p class="vrijednost" id="brIskaznice">{{ $id }}</p>
+            </div>
 
-                <div id="podatci">
+            <div class="centerMe">
+                <p class="poddioIskaznice">Medij</p>
+                <p class="vrijednost" id="medij">{{ $medij }}</p>
+            </div class="centerMe">
 
-                    <div class="centerMe">
-                        <p class="poddioIskaznice">Broj Iskaznice</p>
-                        <p class="vrijednost" id="brIskaznice">{{ $id }}</p>
-                    </div>
+            <div class="centerMe">
+                <p class="poddioIskaznice">Dužnost</p>
+                <p class="vrijednost" id="duznost">{{ $duznost }}</p>
+            </div class="centerMe">
 
-                    <div class="centerMe">
-                        <p class="poddioIskaznice">Medij</p>
-                        <p class="vrijednost" id="medij">{{ $medij }}</p>
-                    </div class="centerMe">
+            <div class="centerMe">
+                <p class="poddioIskaznice">Važi do</p>
+                <p class="vrijednost" id="vazenje">{{ $vazi_do }}</p>
+            </div>
 
-                    <div class="centerMe">
-                        <p class="poddioIskaznice">Dužnost</p>
-                        <p class="vrijednost" id="duznost">{{ $duznost }}</p>
-                    </div class="centerMe">
-
-                    <div class="centerMe">
-                        <p class="poddioIskaznice">Važi do</p>
-                        <p class="vrijednost" id="vazenje">{{ $vazi_do }}</p>
-                    </div>
-
-                    @if (Auth::user() && Auth::user()->role > 0)
-                        <div class="centerMe">
-                            <p class="poddioIskaznice">Dodao korisnik</p>
-                            <p class="vrijednost" id="vazenje">{{ $dodao_korisnik }}</p>
-                        </div>
-                    @endif
+            @if (Auth::user() && Auth::user()->role > 0)
+                <div class="centerMe">
+                    <p class="poddioIskaznice">Dodao Korisnik</p>
+                    <p class="vrijednost" id="vazenje">{{ $dodao_korisnik }}</p>
+                </div>
+            @endif
         </div>
     </div>
 </div>

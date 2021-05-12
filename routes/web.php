@@ -23,8 +23,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/addCard', function() {
     return view('addCard');
-})->middleware('auth');
+})->middleware('auth')->name('addCard');
+
 
 Route::post('/dodajIskaznicu', [CardController::class, 'dodajIskaznicu']);
-
 Route::get('/viewProfile/{brIskaznice}', [CardController::class, 'dohvatiProfil'])->where('brIskaznice', '[0-9]+')->name('viewProfile');
+Route::get('/editProfile/{brIskaznice}', [CardController::class, 'dohvatiProfilZaEditiranje'])->where('brIskaznice', '[0-9]+')->middleware('auth')->name('editProfile');
+Route::post('/editProfile/{brIskaznice}', [CardController::class, 'editProfile'])->where('brIskaznice', '[0-9]+')->middleware('auth')->name('editProfile');
+Route::post('/deleteProfile/{brIskaznice}', [CardController::class, 'deleteProfile'])->where('brIskaznice', '[0-9]+')->middleware('auth')->name('deleteProfile');

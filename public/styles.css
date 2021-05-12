@@ -1,3 +1,12 @@
+.navLink {
+    text-decoration: none;
+    color: #5598bc;
+    text-shadow: 0px 0px 1px #52adf2ad;
+}
+.navLink:hover {
+    text-decoration: none;
+}
+
 #profilePicDiv {
     margin: auto;
 }
@@ -22,6 +31,35 @@
     font-size: 30px;
     font-weight: bolder;
 }
+#adminButtonUserPageDiv {
+    margin: 7%;
+}
+.adminButtonUserPage {
+    font-size: 30px;
+    margin: 7px;
+    text-decoration: none;
+    padding: 15px;
+    color: white;
+}
+.adminButtonUserPage:hover {
+    text-decoration: none;
+    color: white;
+}
+#editCardButton {
+    border-radius: 20px;
+    background-color: #45b6f3;
+}
+#editCardButton:hover {
+    background-color: #3189b8;
+}
+#terminateCardButton {
+    border-radius: 20px;
+    background-color: #e30613;
+}
+#terminateCardButton:hover {
+    background-color: #bb0814;
+}
+
 
 .centerMe {
     text-align: center;
