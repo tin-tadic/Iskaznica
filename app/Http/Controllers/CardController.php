@@ -4,43 +4,45 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Card;
-use App\Models\OldCard;
 use Illuminate\Support\Facades\DB;
 use Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 
 class CardController extends Controller
 {
 
+    //TODO::uuid in final redirect
     public function dodajIskaznicu(Request $request) {
 
         $rules = [
-            'imePrezime' => ['required', 'min:2', 'max: 50'],
-            'medij' => ['required', 'min:2', 'max:50'],
-            'duznost' => ['required', 'min:2', 'max:50'],
-            'vazenje' => ['required', 'date'],
-            'image' => ['required', 'mimes:jpeg,jpg,png,bmp'],
+            'addCard-name' => ['required', 'min:2', 'max: 50'],
+            'addCard-medium' => ['required', 'min:2', 'max:50'],
+            'addCard-duty' => ['required', 'min:2', 'max:50'],
+            'addCard-validUntil' => ['required', 'date'],
+            'addCard_image' => ['required', 'mimes:jpeg,jpg,png,bmp'],
         ];
         $messages = [
-            'imePrezime.required' => 'Niste unijeli ime i prezime!',
-            'imePrezime.min' => 'Ime mora biti minimalno 2 znaka!',
-            'imePrezime.max' => 'Ime mora biti maksimalno 50 znakova!',
+            'addCard-name.required' => 'Niste unijeli ime i prezime!',
+            'addCard-name.min' => 'Ime mora biti minimalno 2 znaka!',
+            'addCard-name.max' => 'Ime mora biti maksimalno 50 znakova!',
 
-            'medij.required' => 'Niste unijeli medij!',
-            'medij.min' => 'Medij mora biti minimalno 2 znaka!',
-            'medij.max' => 'Medij mora biti maksimalno 50 znakova!',
+            'addCard-medium.required' => 'Niste unijeli medij!',
+            'addCard-medium.min' => 'Medij mora biti minimalno 2 znaka!',
+            'addCard-medium.max' => 'Medij mora biti maksimalno 50 znakova!',
 
-            'duznost.required' => 'Niste unijeli dužnost!',
-            'duznost.min' => 'Dužnost mora biti minimalno 2 znaka!',
-            'duznost.max' => 'Dužnost mora biti maksimalno 50 znakova!',
+            'addCard-duty.required' => 'Niste unijeli dužnost!',
+            'addCard-duty.min' => 'Dužnost mora biti minimalno 2 znaka!',
+            'addCard-duty.max' => 'Dužnost mora biti maksimalno 50 znakova!',
 
-            'vazenje.required' => 'Važenje iskaznice nije unešeno!',
-            'vazenje.date'=> 'Datum nije ispravno unešen!',
+            'addCard-validUntil.required' => 'Važenje iskaznice nije unešeno!',
+            'addCard-validUntil.date'=> 'Datum nije ispravno unešen!',
 
-            'image.required' => 'Niste odabrali sliku!',
-            'image.mimes' => 'Format slike nije podržan!',
+            'addCard_image.required' => 'Niste odabrali sliku!',
+            'addCard_image.mimes' => 'Format slike nije podržan!',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -50,21 +52,23 @@ class CardController extends Controller
         }
 
 
-        $name = auth()->user()->id . '-' . time() . '-' . $request->image->getClientOriginalName();
+        
+        $name = auth()->user()->id . '-' . Str::random(15) . '-' . $request->addCard_image->getClientOriginalName();
 
         $newCardId = Card::create([
             'dodao_korisnik' => auth()->user()->id,
-            'ime_prezime' => $request->input('imePrezime'),
-            'medij' => $request->input('medij'),
-            'duznost' => $request->input('duznost'),
-            'vazi_do' => $request->input('vazenje'),
+            'ime_prezime' => $request->input('addCard-name'),
+            'medij' => $request->input('addCard-medium'),
+            'duznost' => $request->input('addCard-duty'),
+            'vazi_do' => $request->input('addCard-validUntil'),
             'slika' => $name,
             'qr_kod' => 'Ako vidite ovu poruku dulje od 1 minute doslo je do greske.',
+            'ID_iskaznice' => Str::uuid(),
         ]);
-        $request->image->storeAs('slikeKorisnika', $name, 'public');
+        $request->addCard_image->storeAs('slikeKorisnika', $name, 'public');
 
-        //QR name generated with time(), needs to be stored because it is used twice separately
-        $qr_name = auth()->user()->id . '-' . time() . '.svg';
+        //QR name is generated with Str::random(), so it needs to be stored because it is used twice separately
+        $qr_name = auth()->user()->id . '-' . Str::random(15) . '.svg';
         QrCode::generate('localhost:8000/viewProfile/' . $newCardId->id, '../public/storage/QR_kodovi/' . $qr_name);
         DB::table('cards')->where('id', $newCardId->id)->update(['qr_kod' => $qr_name]);
 
@@ -73,167 +77,136 @@ class CardController extends Controller
 
 
 
+    //TODO::uuid integration in path
     public function dohvatiProfil($brIskaznice) {
-        if ( DB::table('cards')->where('id', $brIskaznice)->exists() ) {
-            //Use first instead of get
-            $result = DB::table('cards')->where('id', $brIskaznice)->get();
 
-            $slika = $result[0]->slika;
-            $imePrezime = $result[0]->ime_prezime;
-            $id = $result[0]->id;
-            while (strlen($id) < 5) 
-                $id =  '0' . $id;
-            $medij = $result[0]->medij;
-            $duznost = $result[0]->duznost;
-            //Returns 'Day/Month'
-            //$vazi_do = Carbon::parse(result[0]->vazi_do)->foramt('dd.mm.YYYY');
-            $vazi_do = $result[0]->vazi_do[-2] . $result[0]->vazi_do[-1] . '/' . $result[0]->vazi_do[-5] . $result[0]->vazi_do[-4];
+        if ( DB::table('cards')->where('id', $brIskaznice)->where('deleted_at', NULL)->exists() ) {
+            $card = DB::table('cards')->where('id', $brIskaznice)->first();
+
+            while (strlen($card->id) < 5) 
+                $card->id =  '0' . $card->id;
+            $card->vazi_do = Carbon::parse($card->vazi_do)->format('d/m/y');
 
             if (auth()->user() != null && auth()->user()->role > 0) {
-                $dodao_korisnik = DB::table('users')->where('id', $result[0]->dodao_korisnik)->get();
-                $dodao_korisnik = $dodao_korisnik[0]->name;
-                return view("viewProfile", compact('slika', 'imePrezime', 'id', 'medij', 'duznost', 'vazi_do', 'dodao_korisnik'));
+                $dodao_korisnik = DB::table('users')->where('id', $card->dodao_korisnik)->first();
+                $card->dodao_korisnik = $dodao_korisnik->name;
+                return view("viewProfile")->with('card', $card);
             }
             
-            
-            return view("viewProfile", compact('slika', 'imePrezime', 'id', 'medij', 'duznost', 'vazi_do'));
+            return view("viewProfile")->with('card', $card);
         } else {
             return view("notFound");
         }
+
     }
 
+
+    //TODO::uuid integration in path
     public function dohvatiProfilZaEditiranje($brIskaznice) {
-        if ( DB::table('cards')->where('id', $brIskaznice)->exists() ) {
-            $result = DB::table('cards')->where('id', $brIskaznice)->get();
-
-            $slika = $result[0]->slika;
-            $imePrezime = $result[0]->ime_prezime;
-            $id = $result[0]->id;
-            $medij = $result[0]->medij;
-            $duznost = $result[0]->duznost;
-            $vazi_do = $result[0]->vazi_do;            
-            
-            return view("editCard", compact('slika', 'imePrezime', 'id', 'medij', 'duznost', 'vazi_do'));
+        if ( DB::table('cards')->where('id', $brIskaznice)->where('deleted_at', NULL)->exists() ) {
+            $card = DB::table('cards')->where('id', $brIskaznice)->first();
+            return view("editCard")->with('card', $card);
         } else {
             return view("notFound");
         }
     }
 
+
+    //TODO::uuid integration in path
     public function editProfile(Request $request, $brIskaznice) {
-        $rules = [
-            'imePrezime' => ['required', 'min:2', 'max: 50'],
-            'medij' => ['required', 'min:2', 'max:50'],
-            'duznost' => ['required', 'min:2', 'max:50'],
-            'vazenje' => ['required', 'date'],
-            'image' => ['mimes:jpeg,jpg,png,bmp'],
-        ];
-        $messages = [
-            'imePrezime.required' => 'Niste unijeli ime i prezime!',
-            'imePrezime.min' => 'Ime mora biti minimalno 2 znaka!',
-            'imePrezime.max' => 'Ime mora biti maksimalno 50 znakova!',
+        if (DB::table('cards')->where('id', $brIskaznice)->where('deleted_at', NULL)->exists() ) {
+            $rules = [
+                'editCard-name' => ['required', 'min:2', 'max: 50'],
+                'editCard-medium' => ['required', 'min:2', 'max:50'],
+                'editCard-duty' => ['required', 'min:2', 'max:50'],
+                'editCard-validUntil' => ['required', 'date'],
+                'editCard_image' => ['mimes:jpeg,jpg,png,bmp'],
+            ];
+            $messages = [
+                'editCard-name.required' => 'Niste unijeli ime i prezime!',
+                'editCard-name.min' => 'Ime mora biti minimalno 2 znaka!',
+                'editCard-name.max' => 'Ime mora biti maksimalno 50 znakova!',
 
-            'medij.required' => 'Niste unijeli medij!',
-            'medij.min' => 'Medij mora biti minimalno 2 znaka!',
-            'medij.max' => 'Medij mora biti maksimalno 50 znakova!',
+                'editCard-medium.required' => 'Niste unijeli medij!',
+                'editCard-medium.min' => 'Medij mora biti minimalno 2 znaka!',
+                'editCard-medium.max' => 'Medij mora biti maksimalno 50 znakova!',
 
-            'duznost.required' => 'Niste unijeli dužnost!',
-            'duznost.min' => 'Dužnost mora biti minimalno 2 znaka!',
-            'duznost.max' => 'Dužnost mora biti maksimalno 50 znakova!',
+                'editCard-duty.required' => 'Niste unijeli dužnost!',
+                'editCard-duty.min' => 'Dužnost mora biti minimalno 2 znaka!',
+                'editCard-duty.max' => 'Dužnost mora biti maksimalno 50 znakova!',
 
-            'vazenje.required' => 'Važenje iskaznice nije unešeno!',
-            'vazenje.date'=> 'Datum nije ispravno unešen!',
+                'vazeditCard-validUntilenje.required' => 'Važenje iskaznice nije unešeno!',
+                'editCard-validUntil.date'=> 'Datum nije ispravno unešen!',
 
-            'image.mimes' => 'Format slike nije podržan!',
-        ];
+                'editCard_image.mimes' => 'Format slike nije podržan!',
+            ];
 
-        $validator = Validator::make($request->all(), $rules, $messages);
+            $validator = Validator::make($request->all(), $rules, $messages);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator);
-        }
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator);
+            }
 
-        // If there is an image change, upload the new one and delete the old one.
-        // Otherwise just change the other info
-        if($request->image) {
-            $old_name = DB::table('cards')->where('id', $brIskaznice)->value('slika');
-            Storage::delete('/public/slikeKorisnika/' . $old_name);
+            // If there is an image change, upload the new one and delete the old one.
+            // Otherwise just change the other info
+            if($request->editCard_image) {
+                //---------
+                //UUID HERE
+                $old_name = DB::table('cards')->where('id', $brIskaznice)->value('slika');
+                //---------
+                Storage::delete('/public/slikeKorisnika/' . $old_name);
 
-            $name = auth()->user()->id . '-' . time() . '-' . $request->image->getClientOriginalName();
-            DB::table('cards')->where('id', $brIskaznice)
-                ->update([
-                    'dodao_korisnik' => auth()->user()->id,
-                    'ime_prezime' => $request->input('imePrezime'),
-                    'medij' => $request->input('medij'),
-                    'duznost' => $request->input('duznost'),
-                    'vazi_do' => $request->input('vazenje'),
-                    'slika' => $name,
-                    ]);
-            $request->image->storeAs('slikeKorisnika', $name, 'public');
+                $name = auth()->user()->id . '-' . Str::random(15) . '-' . $request->editCard_image->getClientOriginalName();
+                //UUID HEREˇ
+                DB::table('cards')->where('id', $brIskaznice)
+                    ->update([
+                        'dodao_korisnik' => auth()->user()->id,
+                        'ime_prezime' => $request->input('editCard-name'),
+                        'medij' => $request->input('editCard-medium'),
+                        'duznost' => $request->input('editCard-duty'),
+                        'vazi_do' => $request->input('editCard-validUntil'),
+                        'slika' => $name,
+                        ]);
+                $request->editCard_image->storeAs('slikeKorisnika', $name, 'public');
 
-            return redirect()->route('viewProfile', ['brIskaznice' => $brIskaznice]);
+            } else {
+                //UUID HERE
+                DB::table('cards')->where('id', $brIskaznice)
+                    ->update([
+                        'dodao_korisnik' => auth()->user()->id,
+                        'ime_prezime' => $request->input('editCard-name'),
+                        'medij' => $request->input('editCard-medium'),
+                        'duznost' => $request->input('editCard-duty'),
+                        'vazi_do' => $request->input('editCard-validUntil'),
+                        ]);
+            }
+            
+            return redirect()->route('viewProfile', ['brIskaznice' => $brIskaznice])->with('success', 'Promjene uspješno spremljene.');
         } else {
-            DB::table('cards')->where('id', $brIskaznice)
-                ->update([
-                    'dodao_korisnik' => auth()->user()->id,
-                    'ime_prezime' => $request->input('imePrezime'),
-                    'medij' => $request->input('medij'),
-                    'duznost' => $request->input('duznost'),
-                    'vazi_do' => $request->input('vazenje'),
-                    ]);
-            return redirect()->route('viewProfile', ['brIskaznice' => $brIskaznice]);
+            return redirect()->route('home')->with('error', 'Iskaznica je izbrisana ili ne postoji.');
         }
-
-
-        $name = auth()->user()->id . '-' . time() . '-' . $request->image->getClientOriginalName();
-
-        $newCardId = Card::create([
-            'dodao_korisnik' => auth()->user()->id,
-            'ime_prezime' => $request->input('imePrezime'),
-            'medij' => $request->input('medij'),
-            'duznost' => $request->input('duznost'),
-            'vazi_do' => $request->input('vazenje'),
-            'slika' => $name,
-        ]);
-        $request->image->storeAs('slikeKorisnika', $name, 'public');
-
-
-        return redirect()->route('viewProfile', ['brIskaznice' => $newCardId->id]);
     }
 
-    //Make into soft delete()
+
+    //TODO::uuid integration in path
     public function deleteProfile($brIskaznice) {
         if ( DB::table('cards')->where('id', $brIskaznice)->exists() ) {
-            $result = DB::table('cards')->where('id', $brIskaznice)->get();
+            $result = DB::table('cards')->where('id', $brIskaznice)->first();
 
-            $slika = $result[0]->slika;
-            $imePrezime = $result[0]->ime_prezime;
-            $id = $result[0]->id;
-            $medij = $result[0]->medij;
-            $duznost = $result[0]->duznost;
-            $vazi_do = $result[0]->vazi_do;
-            $dodao_korisnik = DB::table('users')->where('id', $result[0]->dodao_korisnik)->get();
+            //Delete image and QR code (and remove their entries from the database), then soft delete item
+            Storage::delete(['public/slikeKorisnika/' . $result->slika, 'public/QR_kodovi/' . $result->qr_kod]);
+            DB::table('cards')->where('id', $brIskaznice)
+                ->update([
+                    'slika' => 'DELETED',
+                    'qr_kod' => 'DELETED',
+                    ]);
+            Card::find($brIskaznice)->delete();
 
-            OldCard::create([
-                'dodao_korisnik' => $dodao_korisnik[0]->id,
-                'ime_prezime' =>  $imePrezime,
-                'medij' => $medij,
-                'duznost' => $duznost,
-                'vazi_do' => $vazi_do,
-                'slika' => $slika,
-                'izbrisano' => now(),
-                'izbrisao_korisnik' => auth()->user()->id,
-            ]);
-            //Storage::move('slikeKorisnika/' . $slika, 'stareSlikeKorisnika/' . $slika);
-
-            DB::table('cards')->where('id', '=', $brIskaznice)->delete();
-
-
-            //TODO::Redirect to home page with message
-            return "Uspjesno izbrisano!";
+            return redirect()->route('home')->with('success', 'Iskaznica uspješno izbrisana.');
         } else {
-            //TODO::Redirect to same page with message
-            return "Doslo je do greske";
+            return redirect()->route('home')->with('error', 'Iskaznica ne postoji.');
         }
+
 
     }
 

@@ -12,48 +12,48 @@
                 <div class="card-body">                    
                     <div class="centerMe">
 
-                        <p id="newCardHeader">Stvaranje nove iskaznice</p>
+                        <p class="newCardHeader">Stvaranje nove iskaznice</p>
                         
                         <hr id="newCardHeaderDivider" />
                         
-                        <form id="newCardForm" action="/dodajIskaznicu" method="POST" enctype="multipart/form-data">
+                        <form id="newCardForm" action="/dodaj-iskaznicu" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div>
                                 <div class="error-wrapper">
-                                    <input class="unosPodataka unesiText" type="text" id="imePrezimeUnos" name="imePrezime" placeholder="Ime i prezime" value="{{ old('imePrezime') }}" /><br />
-                                    @if ($errors->has('imePrezime'))
-                                        <p class="addCardError">{{ $errors->first('imePrezime') }}</p>
+                                    <input class="unosPodataka unesiText" type="text" id="addCard-name" name="addCard-name" placeholder="Ime i prezime" value="{{ old('addCard-name') }}" /><br />
+                                    @if ($errors->has('addCard-name'))
+                                        <p class="addCardError">{{ $errors->first('addCard-name') }}</p>
                                     @endif
                                 </div>
 
                                 <div class="error-wrapper">
-                                    <input class="unosPodataka unesiText" type="text" id="medijUnos" name="medij" placeholder="Medij korisnika" value="{{ old('medij') }}" /><br />
-                                    @if ($errors->has('medij'))
-                                        <p class="addCardError">{{ $errors->first('medij') }}</p>
+                                    <input class="unosPodataka unesiText" type="text" id="addCard-medium" name="addCard-medium" placeholder="Medij korisnika" value="{{ old('addCard-medium') }}" /><br />
+                                    @if ($errors->has('addCard-medium'))
+                                        <p class="addCardError">{{ $errors->first('addCard-medium') }}</p>
                                     @endif
                                 </div>
 
                                 <div class="error-wrapper">
-                                    <input class="unosPodataka unesiText" type="text" id="duznostUnos" name="duznost" placeholder="Dužnost korisnika" value="{{ old('duznost') }}" /><br />
-                                    @if ($errors->has('duznost'))
-                                        <p class="addCardError">{{ $errors->first('duznost') }}</p>
+                                    <input class="unosPodataka unesiText" type="text" id="addCard-duty" name="addCard-duty" placeholder="Dužnost korisnika" value="{{ old('addCard-duty') }}" /><br />
+                                    @if ($errors->has('addCard-duty'))
+                                        <p class="addCardError">{{ $errors->first('addCard-duty') }}</p>
                                     @endif
                                 </div>
 
                                 <div class="error-wrapper">
                                     <p class="label">Važi do:</p>
                                     {{-- Formatiranje obavezno jer now() vraca i vrijeme --}}
-                                    <input class="unosPodataka unesiText" type="date" id="vazenjeUnos" name="vazenje" placeholder="mm/dd/yyyy" value="{{ now()->format('Y-m-d') }}" min="{{ now()->format('Y-m-d') }}" value="{{ old('vazenje') }}" /><br />
-                                    @if ($errors->has('vazenje'))
-                                        <p class="addCardError">{{ $errors->first('vazenje') }}</p>
+                                    <input class="unosPodataka unesiText" type="date" id="addCard-validUntil" name="addCard-validUntil" placeholder="mm/dd/yyyy" value="{{ now()->format('Y-m-d') }}" min="{{ now()->format('Y-m-d') }}" value="{{ old('addCard-validUntil') }}" /><br />
+                                    @if ($errors->has('addCard-validUntil'))
+                                        <p class="addCardError">{{ $errors->first('addCard-validUntil') }}</p>
                                     @endif
                                 </div>
                                 
                                 <div class="error-wrapper addCardBottom">
                                     <p class="label">Profilna slika:</p>
-                                    <input type="file" id="slikaUnos" name="image" /><br />
-                                    @if ($errors->has('image'))
-                                        <p class="addCardError">{{ $errors->first('image') }}</p>
+                                    <input type="file" id="addCard_image" name="addCard_image" /><br />
+                                    @if ($errors->has('addCard_image'))
+                                        <p class="addCardError">{{ $errors->first('addCard_image') }}</p>
                                     @endif
                                 </div>
 

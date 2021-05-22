@@ -1,10 +1,40 @@
 .navLink {
-    text-decoration: none;
-    color: #5598bc;
-    text-shadow: 0px 0px 1px #52adf2ad;
+    color: #5598bc !important;
+    text-shadow: 0px 0px 1px #52adf2ad !important;
 }
 .navLink:hover {
     text-decoration: none;
+}
+
+#messages-div {
+    width: 30%;
+    margin: auto;
+    padding: 3px;
+}
+
+.home-scrollMe {
+    overflow-x: auto;
+}
+.home-displayDataTable {
+    text-align: center;
+    width: 100%;
+    font-size: 15px;
+}
+.home-fitMe {
+    text-align: center;
+}
+.home-displayDataTable td {
+    border-bottom: 1px solid #52adf2ad;
+    padding: 5px;
+}
+.home-displayDataTable thead td {
+    border-bottom: 1px solid black;
+}
+.searchUsers {
+    border-right: 1px solid #e5e5e5;
+}
+.home-displayDataTable thead {
+    font-weight: bold;
 }
 
 #profilePicDiv {
@@ -44,6 +74,7 @@
 .adminButtonUserPage:hover {
     text-decoration: none;
     color: white;
+    cursor: pointer;
 }
 #editCardButton {
     border-radius: 20px;
@@ -95,7 +126,7 @@
     text-align: center;
 }
 
-#newCardHeader {
+.newCardHeader {
     font-size: 25px;
 }
 #newCardHeaderDivider {
@@ -123,7 +154,7 @@
     margin-bottom: 10px;
     font-size: 15px;
 }
-#slikaUnos {
+#addCard_image {
     max-width: 200px;
     font-size: 15px;
 }

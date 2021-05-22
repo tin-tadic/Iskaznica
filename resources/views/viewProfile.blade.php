@@ -10,18 +10,21 @@
 
             <div class="centerMe">
                 <div id="profilePicDiv">
-                    <img id="profilePic" src="/storage/slikeKorisnika/{{ $slika }}" alt="profilna slika" />
+                    <img id="profilePic" src="/storage/slikeKorisnika/{{ $card->slika }}" alt="profilna slika" />
                 </div>
-                <p id="imePrezime">{{ $imePrezime }}</p>
+                <p id="imePrezime">{{ $card->ime_prezime }}</p>
 
                 @if (Auth::user() && Auth::user()->role > 0)
                     
                 <div id="adminButtonUserPageDiv">
-                    <a class="adminButtonUserPage" id="editCardButton" href="{{ route('editProfile', $id) }}">Edit</a>
-                    <a class="adminButtonUserPage" href="{{ route('deleteProfile', ['brIskaznice' => $id]) }}" id="terminateCardButton" onclick="event.preventDefault(); document.getElementById('deleteCard-form').submit();">
-                                Ukini
-                            </a>
-                    <form id="deleteCard-form" action="{{ route('deleteProfile', ['brIskaznice' => $id]) }}" method="POST">
+                    <a class="adminButtonUserPage" id="editCardButton" href="{{ route('editProfile', $card->id) }}">Edit</a>
+                    <a class="adminButtonUserPage" id="terminateCardButton" onclick="event.preventDefault();
+                        if(confirm('Jeste li sigurni da želite izbrisati ovu iskaznicu?')) {
+                                document.getElementById('deleteCard-form').submit();
+                            }">
+                        Ukini
+                    </a>
+                    <form id="deleteCard-form" action="{{ route('deleteProfile', ['brIskaznice' => $card->id]) }}" method="POST">
                         @csrf
                     </form>
                 </div>
@@ -35,28 +38,28 @@
         <div id="podatci">
             <div class="centerMe">
                 <p class="poddioIskaznice">Broj Iskaznice</p>
-                <p class="vrijednost" id="brIskaznice">{{ $id }}</p>
+                <p class="vrijednost" id="brIskaznice">{{ $card->id }}</p>
             </div>
 
             <div class="centerMe">
                 <p class="poddioIskaznice">Medij</p>
-                <p class="vrijednost" id="medij">{{ $medij }}</p>
+                <p class="vrijednost" id="medij">{{ $card->medij }}</p>
             </div class="centerMe">
 
             <div class="centerMe">
                 <p class="poddioIskaznice">Dužnost</p>
-                <p class="vrijednost" id="duznost">{{ $duznost }}</p>
+                <p class="vrijednost" id="duznost">{{ $card->duznost }}</p>
             </div class="centerMe">
 
             <div class="centerMe">
                 <p class="poddioIskaznice">Važi do</p>
-                <p class="vrijednost" id="vazenje">{{ $vazi_do }}</p>
+                <p class="vrijednost" id="vazenje">{{ $card->vazi_do }}</p>
             </div>
 
             @if (Auth::user() && Auth::user()->role > 0)
                 <div class="centerMe">
                     <p class="poddioIskaznice">Dodao Korisnik</p>
-                    <p class="vrijednost" id="vazenje">{{ $dodao_korisnik }}</p>
+                    <p class="vrijednost" id="vazenje">{{ $card->dodao_korisnik }}</p>
                 </div>
             @endif
         </div>

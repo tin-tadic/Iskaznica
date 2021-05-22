@@ -23,6 +23,9 @@ class Iskaznice extends Migration
             $table->date('vazi_do');
             $table->string('slika');
             $table->string('qr_kod');
+            $table->uuid('ID_iskaznice')->unique();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

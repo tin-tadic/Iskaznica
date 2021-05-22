@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Card extends Model
 {
     use HasFactory;
-    
-    public $timestamps = false;
+    use SoftDeletes;
 
     protected $fillable = [
         'dodao_korisnik',
@@ -18,7 +18,8 @@ class Card extends Model
         'duznost',
         'vazi_do',
         'slika',
-        'qr_kod'
+        'qr_kod',
+        'ID_iskaznice',
     ];
 
 
