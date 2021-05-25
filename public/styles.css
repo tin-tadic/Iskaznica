@@ -8,10 +8,14 @@
 
 #messages-div {
     width: 30%;
+    min-width: 300px;
     margin: auto;
     padding: 3px;
 }
 
+.home-radio {
+    padding: 3px;
+}
 .home-scrollMe {
     overflow-x: auto;
 }
@@ -35,6 +39,9 @@
 }
 .home-displayDataTable thead {
     font-weight: bold;
+}
+#home-searchFor {
+    margin-top: 10px;
 }
 
 #profilePicDiv {
@@ -178,3 +185,6 @@
     :-moz-placeholder {
         text-align: center;
     }
+*:focus {
+    outline: none;
+}

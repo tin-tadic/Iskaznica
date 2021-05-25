@@ -16,6 +16,12 @@ class HomeController extends Controller
         $searchBy = $request->searchParametersUser;
         $searchFor = $request->input('home-searchFor');
 
+        // if($request->searchForDeletedCards) {
+        //     dd('disabled search');
+        // } else {
+        //     dd('non disabled search');
+        // }
+
 
         switch($searchBy) {
             
@@ -38,7 +44,7 @@ class HomeController extends Controller
                 if(is_numeric($searchFor) && $searchFor >=0 && $searchFor < 3) {
                     $users = User::where('role', $searchFor)->get();
                     if (sizeof($users) > 0) {
-                        return redirect()->route('home')->with('users', $users);    
+                        return redirect()->route('home')->with('users', $users);
                     }
                     return redirect()->route('home')->with('warning', 'Nisu pronađeni korisnici sa tim ovlastima.');
                 } else {
@@ -48,7 +54,13 @@ class HomeController extends Controller
             
             case "card-byName":
                 if(strlen($searchFor) >= 2) {
-                    $cards = Card::where('ime_prezime', $searchFor)->orWhere('ime_prezime', 'like', '%' . $searchFor . '%')->get();
+
+                    if($request->searchForDeletedCards) {
+                        $cards = Card::where('ime_prezime', $searchFor)->orWhere('ime_prezime', 'like', '%' . $searchFor . '%')->withTrashed()->get();
+                    } else {
+                        $cards = Card::where('ime_prezime', $searchFor)->orWhere('ime_prezime', 'like', '%' . $searchFor . '%')->get();
+                    }
+
                     if (sizeof($cards) > 0) {
                         foreach($cards as $card) {
                             $card->vazi_do = Carbon::parse($card->vazi_do)->format('d/m/y');
@@ -64,7 +76,12 @@ class HomeController extends Controller
             case "card-byNumber":
                 if (is_numeric($searchFor)) {
                     // Has to be `get()` because that's the type of response the frontend expects
-                    $cards = Card::where('id', $searchFor)->get();
+                    if($request->searchForDeletedCards) {
+                        $cards = Card::where('id', $searchFor)->withTrashed()->get();
+                    } else {
+                        $cards = Card::where('id', $searchFor)->get();
+                    }
+
                     if (sizeof($cards) > 0) {
                         $cards[0]->vazi_do = Carbon::parse($cards[0]->vazi_do)->format('d/m/y');
                         return redirect()->route('home')->with('cards', $cards);
@@ -76,10 +93,37 @@ class HomeController extends Controller
         
             case "card-byUuid":
                 if (strlen($searchFor) == 36) {
-                    $cards = Card::where('ID_iskaznice', $searchFor)->get();
-                    return redirect()->back()->with('cards', $cards);
+
+                    if($request->searchForDeletedCards) {
+                        $cards = Card::where('ID_iskaznice', $searchFor)->withTrashed()->get();
+                    } else {
+                        $cards = Card::where('ID_iskaznice', $searchFor)->get();
+                    }
+                    if (sizeof($cards) > 0) {
+                        return redirect()->back()->with('cards', $cards);
+                    } else {
+                        return redirect()->back()->withInput()->with('warning', 'Iskaznica ne postoji ili je obrisana!');
+                    }
+                    
                 } else {
                     return redirect()->back()->withInput()->with('error', 'Neispravan oblik ID-a!');
+                }
+            
+            case "card-byAddedBy":
+                if(strlen($searchFor) > 0 && is_numeric($searchFor)) {
+                    if($request->searchForDeletedCards) {
+                        $cards = Card::where('dodao_korisnik', $searchFor)->withTrashed()->get();
+                    } else {
+                        $cards = Card::where('dodao_korisnik', $searchFor)->get();
+                    }
+                    
+                    if (sizeof($cards) > 0) {
+                        return redirect()->back()->with('cards', $cards);
+                    } else {
+                        return redirect()->back()->withInput()->with('warning', 'Iskaznica ne postoji ili je obrisana!');
+                    }
+                } else {
+                    return redirect()->back()->withInput()->with('error', 'Unesite broj za pretragu po IDu korisnika!');
                 }
 
             default:

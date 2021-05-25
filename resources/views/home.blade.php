@@ -21,32 +21,69 @@
                                         <div class="col-sm searchUsers">
                                             <p class="newCardHeader">Pretraga Korisnika</p>
 
-                                            <input type="radio" name="searchParametersUser" id="user-byName" value="user-byName">
-                                            <label for="user-byName">Po imenu</label>
+                                            <span class="home-radio">
+                                                <label for="user-byName">
+                                                    <input type="radio" name="searchParametersUser" id="user-byName" value="user-byName">
+                                                    Po imenu
+                                                </label>
+                                            </span>
 
+                                            <span class="home-radio">
+                                                <label for="user-byEmail">
+                                                    <input type="radio" name="searchParametersUser" id="user-byEmail" value="user-byEmail">
+                                                    Po mailu
+                                                </label>
+                                            </span>
 
-                                            <input type="radio" name="searchParametersUser" id="user-byEmail" value="user-byEmail">
-                                            <label for="user-byEmail">Po mailu</label>
+                                            <span class="home-radio">
+                                                <label for="user-byRole">
+                                                    <input type="radio" name="searchParametersUser" id="user-byRole" value="user-byRole">
+                                                    Po nivou dopuštenja/ulozi
+                                                </label>
+                                            </span>
 
-                                            <input type="radio" name="searchParametersUser" id="user-byRole" value="user-byRole">
-                                            <label for="user-byRole">Po nivou dopuštenja/ulozi</label>
-
-                                            {{-- add option for disabled users --}}
                                         </div>
 
                                         <div class="col-sm searchCards">
                                             <p class="newCardHeader">Pretraga Iskaznica</p>
 
-                                            <input type="radio" name="searchParametersUser" id="card-byName" value="card-byName">
-                                            <label for="card-byName">Po imenu</label>
+                                            <span class="home-radio">
+                                                <label for="card-byName">
+                                                    <input type="radio" name="searchParametersUser" id="card-byName" value="card-byName">
+                                                    Po imenu
+                                                </label>
+                                                
+                                            </span>
 
-                                            <input type="radio" name="searchParametersUser" id="card-byNumber" value="card-byNumber">
-                                            <label for="card-byNumber">Po broju iskaznice</label>
+                                            <span class="home-radio">
+                                                <label for="card-byNumber">
+                                                    <input type="radio" name="searchParametersUser" id="card-byNumber" value="card-byNumber">
+                                                    Po broju iskaznice
+                                                </label>
+                                            </span>
 
-                                            <input type="radio" name="searchParametersUser" id="card-byUuid" value="card-byUuid">
-                                            <label for="card-byUuid">Po ID-u iskaznice</label>
+                                            <span class="home-radio">
+                                                <label for="card-byUuid">
+                                                    <input type="radio" name="searchParametersUser" id="card-byUuid" value="card-byUuid">
+                                                    Po ID-u iskaznice
+                                                </label>
+                                            </span>
 
-                                            {{-- add option for deleted cards --}}
+                                            <span class="home-radio">
+                                                <label for="card-byAddedBy">
+                                                   <input type="radio" name="searchParametersUser" id="card-byAddedBy" value="card-byAddedBy">
+                                                   Po ID-u korisnika
+                                                </label>
+                                            </span>
+
+
+                                            @if (Auth::user() && Auth::user()->role > 1)
+                                                <br />
+                                                <label for="searchForDeletedCards">
+                                                    <input type="checkBox" name="searchForDeletedCards" id="searchForDeletedCards" value="searchForDeletedCards">
+                                                    Pretraži izbrisane iskaznice
+                                                </label>
+                                            @endif
                                         </div>
 
                                     </div>
