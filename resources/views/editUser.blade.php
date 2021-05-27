@@ -11,46 +11,51 @@
                 <div class="card-body">
                     <div class="centerMe">
 
-                        <p id="newCardHeader">Upravljanje korisničkim podatcima</p>
+                        <p class="newCardHeader">Upravljanje Administratorskim Profilom</p>
                         
                         <hr id="newCardHeaderDivider" />
                         
-                        <form id="newCardForm" action="/TODO" method="POST" enctype="multipart/form-data">
+                        <form id="newCardForm" action="/edit-user/{{ $user->id }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div>
-                                <div class="error-wrapper">
-                                    <p>Ime i prezime</p>
-                                    <input class="unosPodataka unesiText" type="text" id="user-nameInput" name="user-nameInput" placeholder="Ime i prezime" value="{{ $user->name }}" /><br />
-                                    @if ($errors->has('imePrezime'))
-                                        <p class="addCardError">{{ $errors->first('imePrezime') }}</p>
+                                <div class="editAdmin-errorWrapper">
+                                    <p class="bolder">Ime</p>
+                                    <input class="unosPodataka unesiText" type="text" id="editAdmin-nameInput" name="editAdmin-nameInput" placeholder="Ime" value="{{ $user->name }}" /><br />
+                                    @if ($errors->has('editAdmin-nameInput'))
+                                        <p class="addCardError">{{ $errors->first('editAdmin-nameInput') }}</p>
                                     @endif
                                 </div>
 
-                                <div class="error-wrapper">
-                                    <p>Email</p>
-                                    <input class="unosPodataka unesiText" type="text" id="user-emailInput" name="user-emailInput" placeholder="Email korisnika" value="{{ $user->email }}"/><br />
+                                <div class="editAdmin-errorWrapper">
+                                    <p class="bolder">Email</p>
+                                    <input class="unosPodataka unesiText" type="text" id="editAdmin_emailInput" name="email" placeholder="Email korisnika" value="{{ $user->email }}"/><br />
                                     @if ($errors->has('email'))
                                         <p class="addCardError">{{ $errors->first('email') }}</p>
                                     @endif
                                 </div>
 
-                                <div class="error-wrapper">
-                                    <p>Nivo dozvola korisnika</p>
-                                    <input class="unosPodataka unesiText" type="text" id="user-permissionInput" name="user-permissionInput" placeholder="Dužnost korisnika" value="{{ $user->duznost }}" /><br />
-                                    @if ($errors->has('duznost'))
-                                        <p class="addCardError">{{ $errors->first('duznost') }}</p>
-                                    @endif
-                                </div>
-
-                                <div class="error-wrapper">
-                                    <p class="label">Zadnji put mijenjano</p>
-                                    {{-- Formatiranje obavezno jer now() vraca i vrijeme --}}
-                                    <input class="unosPodataka unesiText" type="date" id="user-lastUpdated" value="{{ $user->updated_at }}" /><br />
-                                </div>
                                 
+                                <div class="editAdmin-errorWrapper">
+                                    <fieldset id="passwordChange">
+                                        
+                                        <legend id="passwordChangeLegend">Promjena šifre</legend>
+                                        
+                                        <p class="bolder">Šifra</p>
+                                        <input class="unosPodataka unesiText editAdmin-password" type="password" id="editAdmin-passwordInput" name="editAdmin-passwordInput" placeholder="Unesite novu šifru" /><br /><br />
+                                        
+                                        <p class="bolder">Potvrda šifre</p>
+                                        <input class="unosPodataka unesiText editAdmin-password" type="password" id="editAdmin-passwordInput_confirmation" name="editAdmin-passwordInput_confirmation" placeholder="Potvrdite novu šifru" /><br />
+                                        
+                                        @if ($errors->has('editAdmin-passwordInput'))
+                                            <p class="addCardError">{{ $errors->first('editAdmin-passwordInput') }}</p>
+                                        @endif
+
+                                    </fieldset>
+                                </div>
 
 
-                                <input class="unosPodataka dugmadi" type="submit" id="napraviIskaznicu" value="Spremi promjene" />
+                                
+                                <input class="unosPodataka dugmadi editAdmin-button" type="submit" id="napraviIskaznicu" value="Spremi promjene" />
                             </div>
                         </form>
 

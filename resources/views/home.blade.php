@@ -19,7 +19,7 @@
                                     <div class="row">
 
                                         <div class="col-sm searchUsers">
-                                            <p class="newCardHeader">Pretraga Korisnika</p>
+                                            <p class="newCardHeader">Pretraga Administratora</p>
 
                                             <span class="home-radio">
                                                 <label for="user-byName">
@@ -108,7 +108,7 @@
                         <table class="home-displayDataTable">
                             <thead>
                                 <td>Ime</td>
-                                <td>ID korisnika</td>
+                                <td>ID administratora</td>
                                 <td>Email</td>
                                 <td>Nivo dozvola korisnika</td>
                                 <td>Zadnji put mijenjano</td>

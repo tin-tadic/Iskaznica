@@ -98,15 +98,39 @@
     background-color: #bb0814;
 }
 
+.bolder {
+    font-size: 15px;
+    font-weight: bold;
+}
+.editAdmin-password {
+    min-width: 93%;
+}
+.editAdmin-errorWrapper {
+    margin-bottom: 10px;
+}
+.editAdmin-button {
+    margin-top: 50px;
+}
+#passwordChange {
+    border: 2px solid #e30613;
+    padding: 20px;
+    border-radius: 30px;
+    width: 60%;
+    margin: 50px auto;
+}
+#passwordChangeLegend {
+    color: #e30613;
+    margin: auto;
+    word-wrap: normal;
+}
+
 
 .centerMe {
     text-align: center;
 }
-
 .padMe {
     margin-top: 5%;
 }
-
 .rightSide {
     margin: auto;
     padding: 0;
