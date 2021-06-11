@@ -23,7 +23,7 @@
 
                                             <span class="home-radio">
                                                 <label for="user-byName">
-                                                    <input type="radio" name="searchParametersUser" id="user-byName" value="user-byName">
+                                                    <input type="radio" name="searchParametersUser" id="user-byName" value="user-byName" checked>
                                                     Po imenu
                                                 </label>
                                             </span>
@@ -90,7 +90,7 @@
                                   </div>
                                 <br />
 
-                                {{-- ^Remove this and add a margin to the button below --}}
+                                {{-- ^TODO::Remove this and add a margin to the button below --}}
 
                                 <input class="unosPodataka unesiText" type="text" id="home-searchFor" name="home-searchFor" placeholder="Upišite kriterij za pretragu" value="{{ old('unosKorisnika') }}" /><br />
                             </div>
@@ -120,7 +120,7 @@
                                     <td class="home-displayData">{{ $user->id }}</td>
                                     <td class="home-displayData">{{ $user->email }}</td>
                                     <td class="home-displayData">{{ $user->role }}</td>
-                                    <td class="home-displayData">{{ $user->updated_at->format("d/m/y h:m") }}</td>
+                                    <td class="home-displayData">{{ $user->updated_at->format("d/m/y H:i") }}</td>
                                     <td>
                                         <a href="{{ route('getUserForEdit', $user->id) }}" target="_blank">Edit</a>
                                     </td>
@@ -151,7 +151,7 @@
                                     <td class="home-displayData">{{ $card->medij }}</td>
                                     <td class="home-displayData">{{ $card->duznost }}</td>
                                     <td class="home-displayData">{{ $card->vazi_do }}</td>
-                                    <td class="home-displayData">{{ $card->updated_at->format("d/m/y h:m") }}</td>
+                                    <td class="home-displayData">{{ $card->updated_at->format("d/m/y H:i") }}</td>
                                     <td>
                                         <a href="{{ route('viewProfile', $card->id) }}" target="_blank">Pregled</a>
                                     </td>

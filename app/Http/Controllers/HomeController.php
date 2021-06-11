@@ -16,16 +16,8 @@ class HomeController extends Controller
         $searchBy = $request->searchParametersUser;
         $searchFor = $request->input('home-searchFor');
 
-        // if($request->searchForDeletedCards) {
-        //     dd('disabled search');
-        // } else {
-        //     dd('non disabled search');
-        // }
-
-
         switch($searchBy) {
             
-            // If return else?
             case "user-byName":
                 $users = User::where('name', $searchFor)->orWhere('name', 'like', '%' . $searchFor . '%')->get();
                 if (sizeof($users) > 0) {

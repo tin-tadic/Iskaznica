@@ -51,7 +51,6 @@ class CardController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-
         
         $name = auth()->user()->id . '-' . Str::random(15) . '-' . $request->addCard_image->getClientOriginalName();
 
@@ -74,8 +73,6 @@ class CardController extends Controller
 
         return redirect()->route('viewProfile', ['brIskaznice' => $newCardId->id]);
     }
-
-
 
     //TODO::uuid integration in path
     public function dohvatiProfil($brIskaznice) {
@@ -100,7 +97,6 @@ class CardController extends Controller
 
     }
 
-
     //TODO::uuid integration in path
     public function dohvatiProfilZaEditiranje($brIskaznice) {
         if ( DB::table('cards')->where('id', $brIskaznice)->where('deleted_at', NULL)->exists() ) {
@@ -110,7 +106,6 @@ class CardController extends Controller
             return view("notFound");
         }
     }
-
 
     //TODO::uuid integration in path
     public function editProfile(Request $request, $brIskaznice) {
@@ -186,7 +181,6 @@ class CardController extends Controller
             return redirect()->route('home')->with('error', 'Iskaznica je izbrisana ili ne postoji.');
         }
     }
-
 
     //TODO::uuid integration in path
     public function deleteProfile($brIskaznice) {

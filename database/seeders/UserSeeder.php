@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 
 use DB;
 use Hash;
+use Carbon\Carbon;
 
 class UserSeeder extends Seeder
 {
@@ -21,6 +22,9 @@ class UserSeeder extends Seeder
             'email' => 'jozo@gmail.com',
             'password' => Hash::make('jozo'),
             'role' => 2,
+            'password_changed' => 1,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
     }
 }

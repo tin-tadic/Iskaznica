@@ -12,7 +12,7 @@
                 <div class="card-body">                    
                     <div class="centerMe">
 
-                        <p id="newCardHeader">Promjena podataka iskaznice</p>
+                        <p class="newCardHeader">Promjena podataka iskaznice</p>
                         
                         <hr id="newCardHeaderDivider" />
                         <form id="newCardForm" action="/edit-iskaznice/{{ $card->id }}" method="POST" enctype="multipart/form-data">
@@ -56,7 +56,7 @@
                                     @endif
                                 </div>
 
-                                <input class="unosPodataka dugmadi" type="submit" id="napraviIskaznicu" value="Napravi iskaznicu" />
+                                <input class="unosPodataka dugmadi" type="submit" id="napraviIskaznicu" value="Spremi promjene" />
                             </div>
                         </form>
                         

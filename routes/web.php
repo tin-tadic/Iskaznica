@@ -19,20 +19,26 @@ Route::get('/', function() {
     return view('home');
 })->middleware('auth')->name('home');
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
-//Homepage route
+// Homepage route
 Route::post('pretraga-korisnika', [HomeController::class, 'getUsers'])
     ->middleware(['auth', 'isAdmin'])->name('searchUsers');
+
+// User routes
 Route::get('edit-user/{userId}', [HomeController::class, 'getUserForEdit'])
     ->middleware(['auth', 'isAdmin', 'canEditProfile'])->name('getUserForEdit');
 Route::post('edit-user/{userId}', [UserController::class, 'editUser'])
     ->middleware(['auth', 'isAdmin', 'canEditProfile'])->name('editUser');
+Route::get('add-user', [UserController::class, 'loadAddUser'])
+    ->middleware(['auth', 'isSuperAdmin'])->name('loadAddUser');
+Route::post('add-user', [UserController::class, 'addUser'])
+    ->middleware(['auth', 'isSuperAdmin'])->name('addUser');
 
 // Card routes
 Route::get('/dodaj-iskaznicu', function() {
     return view('addCard');
-})->middleware(['auth', 'isAdmin'])->name('addCard');
+})->middleware(['auth', 'isAdmin', 'changedPassword'])->name('addCard');
 Route::get('/iskaznica/{brIskaznice}', [CardController::class, 'dohvatiProfil'])
     ->name('viewProfile');
 Route::post('/dodaj-iskaznicu', [CardController::class, 'dodajIskaznicu'])
