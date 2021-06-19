@@ -15,7 +15,6 @@ use Carbon\Carbon;
 class CardController extends Controller
 {
 
-    //TODO::uuid in final redirect
     public function dodajIskaznicu(Request $request) {
 
         $rules = [
@@ -71,14 +70,13 @@ class CardController extends Controller
         QrCode::generate('localhost:8000/viewProfile/' . $newCardId->id, '../public/storage/QR_kodovi/' . $qr_name);
         DB::table('cards')->where('id', $newCardId->id)->update(['qr_kod' => $qr_name]);
 
-        return redirect()->route('viewProfile', ['brIskaznice' => $newCardId->id]);
+        return redirect()->route('viewProfile', ['brIskaznice' => $newCardId->ID_iskaznice]);
     }
 
-    //TODO::uuid integration in path
     public function dohvatiProfil($brIskaznice) {
 
-        if ( DB::table('cards')->where('id', $brIskaznice)->where('deleted_at', NULL)->exists() ) {
-            $card = DB::table('cards')->where('id', $brIskaznice)->first();
+        if ( DB::table('cards')->where('ID_iskaznice', $brIskaznice)->where('deleted_at', NULL)->exists() ) {
+            $card = DB::table('cards')->where('ID_iskaznice', $brIskaznice)->first();
 
             while (strlen($card->id) < 5) 
                 $card->id =  '0' . $card->id;
@@ -97,19 +95,17 @@ class CardController extends Controller
 
     }
 
-    //TODO::uuid integration in path
     public function dohvatiProfilZaEditiranje($brIskaznice) {
-        if ( DB::table('cards')->where('id', $brIskaznice)->where('deleted_at', NULL)->exists() ) {
-            $card = DB::table('cards')->where('id', $brIskaznice)->first();
+        if ( DB::table('cards')->where('ID_iskaznice', $brIskaznice)->where('deleted_at', NULL)->exists() ) {
+            $card = DB::table('cards')->where('ID_iskaznice', $brIskaznice)->first();
             return view("editCard")->with('card', $card);
         } else {
             return view("notFound");
         }
     }
 
-    //TODO::uuid integration in path
     public function editProfile(Request $request, $brIskaznice) {
-        if (DB::table('cards')->where('id', $brIskaznice)->where('deleted_at', NULL)->exists() ) {
+        if (DB::table('cards')->where('ID_iskaznice', $brIskaznice)->where('deleted_at', NULL)->exists() ) {
             $rules = [
                 'editCard-name' => ['required', 'min:2', 'max: 50'],
                 'editCard-medium' => ['required', 'min:2', 'max:50'],
@@ -145,15 +141,11 @@ class CardController extends Controller
             // If there is an image change, upload the new one and delete the old one.
             // Otherwise just change the other info
             if($request->editCard_image) {
-                //---------
-                //UUID HERE
-                $old_name = DB::table('cards')->where('id', $brIskaznice)->value('slika');
-                //---------
+                $old_name = DB::table('cards')->where('ID_iskaznice', $brIskaznice)->value('slika');
                 Storage::delete('/public/slikeKorisnika/' . $old_name);
 
                 $name = auth()->user()->id . '-' . Str::random(15) . '-' . $request->editCard_image->getClientOriginalName();
-                //UUID HEREˇ
-                DB::table('cards')->where('id', $brIskaznice)
+                DB::table('cards')->where('ID_iskaznice', $brIskaznice)
                     ->update([
                         'dodao_korisnik' => auth()->user()->id,
                         'ime_prezime' => $request->input('editCard-name'),
@@ -165,8 +157,7 @@ class CardController extends Controller
                 $request->editCard_image->storeAs('slikeKorisnika', $name, 'public');
 
             } else {
-                //UUID HERE
-                DB::table('cards')->where('id', $brIskaznice)
+                DB::table('cards')->where('ID_iskaznice', $brIskaznice)
                     ->update([
                         'dodao_korisnik' => auth()->user()->id,
                         'ime_prezime' => $request->input('editCard-name'),
@@ -182,19 +173,18 @@ class CardController extends Controller
         }
     }
 
-    //TODO::uuid integration in path
     public function deleteProfile($brIskaznice) {
-        if ( DB::table('cards')->where('id', $brIskaznice)->exists() ) {
-            $result = DB::table('cards')->where('id', $brIskaznice)->first();
+        if ( DB::table('cards')->where('ID_iskaznice', $brIskaznice)->exists() ) {
+            $result = DB::table('cards')->where('ID_iskaznice', $brIskaznice)->first();
 
             //Delete image and QR code (and remove their entries from the database), then soft delete item
             Storage::delete(['public/slikeKorisnika/' . $result->slika, 'public/QR_kodovi/' . $result->qr_kod]);
-            DB::table('cards')->where('id', $brIskaznice)
+            DB::table('cards')->where('ID_iskaznice', $brIskaznice)
                 ->update([
                     'slika' => 'DELETED',
                     'qr_kod' => 'DELETED',
                     ]);
-            Card::find($brIskaznice)->delete();
+            Card::where('ID_iskaznice', $brIskaznice)->delete();
 
             return redirect()->route('home')->with('success', 'Iskaznica uspješno izbrisana.');
         } else {

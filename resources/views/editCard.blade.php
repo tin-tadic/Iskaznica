@@ -15,7 +15,7 @@
                         <p class="newCardHeader">Promjena podataka iskaznice</p>
                         
                         <hr id="newCardHeaderDivider" />
-                        <form id="newCardForm" action="/edit-iskaznice/{{ $card->id }}" method="POST" enctype="multipart/form-data">
+                        <form id="newCardForm" action="/edit-iskaznice/{{ $card->ID_iskaznice }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div>
                                 <div class="error-wrapper">

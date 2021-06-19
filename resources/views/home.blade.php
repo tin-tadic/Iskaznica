@@ -151,7 +151,7 @@
                                     <td class="home-displayData">{{ $card->vazi_do }}</td>
                                     <td class="home-displayData">{{ $card->updated_at->format("d/m/y H:i") }}</td>
                                     <td>
-                                        <a href="{{ route('viewProfile', $card->id) }}" target="_blank">Pregled</a>
+                                        <a href="{{ route('viewProfile', $card->ID_iskaznice) }}" target="_blank">Pregled</a>
                                     </td>
                                 </tr>
                             @endforeach

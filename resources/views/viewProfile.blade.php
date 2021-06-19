@@ -17,14 +17,14 @@
                 @if (Auth::user() && Auth::user()->role > 0)
                     
                 <div id="adminButtonUserPageDiv">
-                    <a class="adminButtonUserPage" id="editCardButton" href="{{ route('editProfile', $card->id) }}">Edit</a>
+                    <a class="adminButtonUserPage" id="editCardButton" href="{{ route('editProfile', $card->ID_iskaznice) }}">Edit</a>
                     <a class="adminButtonUserPage" id="terminateCardButton" onclick="event.preventDefault();
                         if(confirm('Jeste li sigurni da želite izbrisati ovu iskaznicu?')) {
                                 document.getElementById('deleteCard-form').submit();
                             }">
                         Ukini
                     </a>
-                    <form id="deleteCard-form" action="{{ route('deleteProfile', ['brIskaznice' => $card->id]) }}" method="POST">
+                    <form id="deleteCard-form" action="{{ route('deleteProfile', ['brIskaznice' => $card->ID_iskaznice]) }}" method="POST">
                         @csrf
                     </form>
                 </div>
