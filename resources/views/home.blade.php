@@ -90,8 +90,6 @@
                                   </div>
                                 <br />
 
-                                {{-- ^TODO::Remove this and add a margin to the button below --}}
-
                                 <input class="unosPodataka unesiText" type="text" id="home-searchFor" name="home-searchFor" placeholder="Upišite kriterij za pretragu" value="{{ old('unosKorisnika') }}" /><br />
                             </div>
                         </div>

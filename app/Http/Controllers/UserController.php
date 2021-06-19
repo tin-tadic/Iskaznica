@@ -60,7 +60,7 @@ class UserController extends Controller
         $rules = [];
         $user = User::where('id', $userId)->first();
         
-        //Check for validate if exists; sometimes
+        //TODO::Check for validate if exists; sometimes
         if ($request->input('editAdmin-nameInput') != $user->name) {
             $rules['editAdmin-nameInput'] = ['required', 'min:2', 'max: 50'];
         }
@@ -94,7 +94,7 @@ class UserController extends Controller
 
         //If anything has been changed, we check what was changed and update it
         if(!empty($rules)) {
-            //TODO::update
+            //TODO::handle this using update
 
             if (array_key_exists('editAdmin-nameInput', $rules)) {
                 $user->name = $request->input('editAdmin-nameInput');

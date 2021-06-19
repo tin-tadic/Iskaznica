@@ -42,7 +42,7 @@
 
                                 <div class="error-wrapper">
                                     <p class="label">Važi do:</p>
-                                    {{-- Formatiranje obavezno jer now() vraca i vrijeme --}}
+                                    {{-- format() command is mantaory because now() returns h and m --}}
                                     <input class="unosPodataka unesiText" type="date" id="addCard-validUntil" name="addCard-validUntil" placeholder="mm/dd/yyyy" value="{{ now()->format('Y-m-d') }}" min="{{ now()->format('Y-m-d') }}" value="{{ old('addCard-validUntil') }}" /><br />
                                     @if ($errors->has('addCard-validUntil'))
                                         <p class="addCardError">{{ $errors->first('addCard-validUntil') }}</p>
