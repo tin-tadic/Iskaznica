@@ -60,7 +60,8 @@ class UserController extends Controller
         $rules = [];
         $user = User::where('id', $userId)->first();
         
-        //TODO::Check for validate if exists; sometimes
+        //Here we check the request and only add the validation rules if the user has changed that field
+        //This is done because it allows us to only call the "update" function later on for only the changed fields
         if ($request->input('editAdmin-nameInput') != $user->name) {
             $rules['editAdmin-nameInput'] = ['required', 'min:2', 'max: 50'];
         }
@@ -94,7 +95,6 @@ class UserController extends Controller
 
         //If anything has been changed, we check what was changed and update it
         if(!empty($rules)) {
-            //TODO::handle this using update
 
             if (array_key_exists('editAdmin-nameInput', $rules)) {
                 $user->name = $request->input('editAdmin-nameInput');
@@ -104,7 +104,11 @@ class UserController extends Controller
             }
             if (array_key_exists('editAdmin-passwordInput', $rules)) {
                 $user->password = Hash::make($request->input('editAdmin-passwordInput'));
-                $user->password_changed = 1;
+                
+                //Reduces strain on DB with one (1!) whole less write request
+                if (!$user->password_changed) {
+                    $user->password_changed = 1;
+                }
             }
             $user->save();
 

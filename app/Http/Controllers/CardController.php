@@ -67,7 +67,7 @@ class CardController extends Controller
 
         //QR name is generated with Str::random(), so it needs to be stored because it is used twice separately
         $qr_name = auth()->user()->id . '-' . Str::random(15) . '.svg';
-        QrCode::generate('localhost:8000/viewProfile/' . $newCardId->id, '../public/storage/QR_kodovi/' . $qr_name);
+        QrCode::generate('localhost:8000/viewProfile/' . $newCardId->ID_iskaznice, '../public/storage/QR_kodovi/' . $qr_name);
         DB::table('cards')->where('id', $newCardId->id)->update(['qr_kod' => $qr_name]);
 
         return redirect()->route('viewProfile', ['brIskaznice' => $newCardId->ID_iskaznice]);
@@ -111,7 +111,7 @@ class CardController extends Controller
                 'editCard-medium' => ['required', 'min:2', 'max:50'],
                 'editCard-duty' => ['required', 'min:2', 'max:50'],
                 'editCard-validUntil' => ['required', 'date'],
-                'editCard_image' => ['mimes:jpeg,jpg,png,bmp'],
+                'editCard_image' => ['sometimes', 'mimes:jpeg,jpg,png,bmp'],
             ];
             $messages = [
                 'editCard-name.required' => 'Niste unijeli ime i prezime!',

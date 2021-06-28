@@ -23,13 +23,13 @@ Auth::routes(['register' => false]);
 
 // Homepage route
 Route::post('pretraga-korisnika', [HomeController::class, 'getUsers'])
-    ->middleware(['auth', 'isAdmin'])->name('searchUsers');
+    ->middleware(['auth'])->name('searchUsers');
 
 // User routes
 Route::get('edit-user/{userId}', [HomeController::class, 'getUserForEdit'])
-    ->middleware(['auth', 'isAdmin', 'canEditProfile'])->name('getUserForEdit');
+    ->middleware(['auth', 'canEditProfile'])->name('getUserForEdit');
 Route::post('edit-user/{userId}', [UserController::class, 'editUser'])
-    ->middleware(['auth', 'isAdmin', 'canEditProfile'])->name('editUser');
+    ->middleware(['auth', 'canEditProfile'])->name('editUser');
 Route::get('add-user', [UserController::class, 'loadAddUser'])
     ->middleware(['auth', 'isSuperAdmin'])->name('loadAddUser');
 Route::post('add-user', [UserController::class, 'addUser'])
@@ -38,14 +38,14 @@ Route::post('add-user', [UserController::class, 'addUser'])
 // Card routes
 Route::get('/dodaj-iskaznicu', function() {
     return view('addCard');
-})->middleware(['auth', 'isAdmin', 'changedPassword'])->name('addCard');
+})->middleware(['auth', 'changedPassword'])->name('addCard');
 Route::get('/iskaznica/{brIskaznice}', [CardController::class, 'dohvatiProfil'])
     ->name('viewProfile');
 Route::post('/dodaj-iskaznicu', [CardController::class, 'dodajIskaznicu'])
-    ->middleware(['auth', 'isAdmin']);
+    ->middleware(['auth', 'changedPassword']);
 Route::get('/edit-iskaznice/{brIskaznice}', [CardController::class, 'dohvatiProfilZaEditiranje'])
-    ->middleware(['auth', 'isAdmin'])->name('editProfile');
+    ->middleware(['auth', 'changedPassword'])->name('editProfile');
 Route::post('/edit-iskaznice/{brIskaznice}', [CardController::class, 'editProfile'])
-    ->middleware(['auth', 'isAdmin'])->name('saveEditProfile');
+    ->middleware(['auth', 'changedPassword'])->name('saveEditProfile');
 Route::post('/izbrisi-iskaznicu/{brIskaznice}', [CardController::class, 'deleteProfile'])
-    ->middleware(['auth', 'isAdmin'])->name('deleteProfile');
+    ->middleware(['auth', 'changedPassword'])->name('deleteProfile');

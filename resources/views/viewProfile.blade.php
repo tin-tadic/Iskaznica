@@ -6,11 +6,30 @@
 <div class="container">
     <div class="row justify-content-center padMe">
 
+        {{-- QR modal --}}
+        <div class="modal fade" id="qrCodeModal">
+            <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">QR kod na iskaznicu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>  
+                <div class="modal-body centerMe">
+                    <img id="QRcodeImg" src="/storage/QR_kodovi/{{ $card->qr_kod }}" alt="kod ne postoji">
+                    <p>{{ $card->ime_prezime }}</p>
+                </div>
+            </div>
+            </div>
+        </div>
+        {{-- /QR modal --}}
+
         <div class="col-md-6 leftSide">
 
             <div class="centerMe">
                 <div id="profilePicDiv">
-                    <img id="profilePic" src="/storage/slikeKorisnika/{{ $card->slika }}" alt="profilna slika" />
+                    <img data-toggle="modal" data-target="#qrCodeModal" id="profilePic" src="/storage/slikeKorisnika/{{ $card->slika }}" alt="slika ne postoji" />
                 </div>
                 <p id="imePrezime">{{ $card->ime_prezime }}</p>
 
