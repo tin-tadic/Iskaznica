@@ -51,7 +51,6 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('home')->with('success', 'Administrator uspješno dodan.');
-        dd("radi");
     }
 
     public function editUser(Request $request, $userId) {
@@ -63,13 +62,13 @@ class UserController extends Controller
         //Here we check the request and only add the validation rules if the user has changed that field
         //This is done because it allows us to only call the "update" function later on for only the changed fields
         if ($request->input('editAdmin-nameInput') != $user->name) {
-            $rules['editAdmin-nameInput'] = ['required', 'min:2', 'max: 50'];
+            $rules['editAdmin-nameInput'] = ['min:2', 'max: 50'];
         }
         if ($request->input('editAdmin-passwordInput')) {
             $rules['editAdmin-passwordInput'] = ['min:8', 'confirmed'];
         }
         if ($request->input('email') != $user->email) {
-            $rules['email'] = ['required', 'min:2', 'max:50', 'email', 'unique:users'];
+            $rules['email'] = ['min:2', 'max:50', 'email', 'unique:users'];
         }
 
         $messages = [
@@ -120,4 +119,31 @@ class UserController extends Controller
             
 
     }
+
+    public function disableAdmin($userId) {
+
+        //Prevents the superadmin from disabling themselves
+        if (User::find($userId)->role == 2) {
+            return redirect()->route('home')->with('error', 'Ne možete sami sebi onesposobiti račun...');
+        }
+
+        try {
+            User::find($userId)->update(['disabled' => 1]);
+            return redirect()->back()->with('info', 'Ovaj administrator je sada onemogućen!');
+
+        } catch (ModelNotFoundException $exception) {
+            return redirect()->route('home')->with('error', 'Taj administrator ne postoji!');
+        }
+    }
+
+    public function enableAdmin($userId) {
+        try {
+            User::find($userId)->update(['disabled' => 0]);
+            return redirect()->back()->with('success', 'Ovaj administrator je ponovno omogućen!');
+
+        } catch (ModelNotFoundException $exception) {
+            return redirect()->route('home')->with('error', 'Taj administrator ne postoji!');
+        }
+    }
+
 }

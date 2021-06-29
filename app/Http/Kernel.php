@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'canEditProfile' => \App\Http\Middleware\CanEditProfile::class,
         'changedPassword' => \App\Http\Middleware\ChangedPassword::class,
         'isSuperAdmin' => \App\Http\Middleware\IsSuperAdmin::class,
+        'isDisabled' => \App\Http\Middleware\IsDisabled::class,
     ];
 }

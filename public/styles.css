@@ -112,7 +112,7 @@
     margin-bottom: 10px;
 }
 .editAdmin-button {
-    margin-top: 50px;
+    margin-top: 10px;
 }
 #passwordChange {
     border: 2px solid #e30613;
@@ -125,6 +125,17 @@
     color: #e30613;
     margin: auto;
     word-wrap: normal;
+}
+.editAdmin-main {
+    margin-bottom: 20px;
+}
+.editAdmin-hammerTime {
+    color: red;
+}
+.editAdmin-hammerTime:hover {
+    color: red;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 

@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->integer('role')->default(0);
             $table->integer('password_changed')->default(0);
+            $table->boolean('disabled')->default(0);
             $table->timestamps();
         });
     }

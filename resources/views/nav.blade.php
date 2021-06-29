@@ -37,6 +37,9 @@
                 @endif
             @else
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('getUserForEdit', auth()->user()->id) }}">Postavke profile</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();">

@@ -17,7 +17,7 @@
                         
                         <form id="newCardForm" action="/edit-user/{{ $user->id }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div>
+                            <div class="editAdmin-main">
                                 <div class="editAdmin-errorWrapper">
                                     <p class="bolder">Ime</p>
                                     <input class="unosPodataka unesiText" type="text" id="editAdmin-nameInput" name="editAdmin-nameInput" placeholder="Ime" value="{{ $user->name }}" /><br />
@@ -58,6 +58,32 @@
                                 <input class="unosPodataka dugmadi editAdmin-button" type="submit" id="napraviIskaznicu" value="Spremi promjene" />
                             </div>
                         </form>
+
+                        @if(Auth::user()->role == 2 && $user->id != 1)
+                            <div>
+                                @if(!$user->disabled)
+                                    <a class="editAdmin-hammerTime" id="" onclick="event.preventDefault();
+                                        if(confirm('Jeste li sigurni da želite onesposobiti račun ovog administratora? \n\nKorisnik se neće moći prijaviti dok ne osposobite račun.')) {
+                                                document.getElementById('disableAdmin').submit();
+                                            }">
+                                        Onesposobi račun
+                                    </a>
+                                    <form id="disableAdmin" action="{{ route('disableAdmin', ['userId' => $user->id]) }}" method="POST">
+                                        @csrf
+                                    </form>
+                                @else
+                                    <a class="editAdmin-hammerTime" id="" onclick="event.preventDefault();
+                                        if(confirm('Jeste li sigurni da želite ponovno osposobiti račun ovog administratora?')) {
+                                                document.getElementById('enableAdmin').submit();
+                                            }">
+                                        Osposobi račun
+                                    </a>
+                                    <form id="enableAdmin" action="{{ route('enableAdmin', ['userId' => $user->id]) }}" method="POST">
+                                        @csrf
+                                    </form>
+                                @endif
+                            </div>
+                        @endif
 
                     </div>
 
