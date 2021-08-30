@@ -33,19 +33,6 @@
                                         <p class="addCardError">{{ $errors->first('email') }}</p>
                                     @endif
                                 </div>
-                                
-                                <div class="editAdmin-errorWrapper">
-
-                                    <p class="bolder">Automatski Generirana Šifra</p>
-                                    <div>
-                                        <input type="text" class="unosPodataka unesiText" id="editAdmin-passwordInput" name="password" value="{{ $password }}" /><br />
-                                    </div>
-                                    <p>
-                                        Novi administratori moraju promijeniti šifru prije donošenja ikakvih promjena!<br />
-                                        Kliknite na dugme kako biste kopirali generiranu šifru.
-                                    </p>
-                                    <button type="button" id="copyPasswordButton" onclick="copyPassword()">Kopiraj šifru</button>
-                                </div>
 
                                 <input class="unosPodataka dugmadi editAdmin-button" type="submit" id="napraviIskaznicu" value="Dodaj Administratora" />
                             </div>
@@ -59,25 +46,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    function copyPassword() {
-
-        //TODO::automail
-        var copyText = document.getElementById("editAdmin-passwordInput");
-        copyText.select();
-        copyText.setSelectionRange(0, 99999);
-        document.execCommand("copy");
-        alert("Šifra uspješno kopirana.");
-    }
-</script>
-
-<style>
-    #copyPasswordButton {
-        border: 1px solid blue;
-        border-radius: 10px;
-        color: red;
-    }
-</style>
 
 @endsection
