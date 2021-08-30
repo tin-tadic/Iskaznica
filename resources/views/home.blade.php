@@ -117,8 +117,16 @@
                                     <td class="home-displayData">{{ $user->name }}</td>
                                     <td class="home-displayData">{{ $user->id }}</td>
                                     <td class="home-displayData">{{ $user->email }}</td>
-                                    <td class="home-displayData">{{ $user->role }}</td>
-                                    <td class="home-displayData">{{ $user->updated_at->format("d/m/y H:i") }}</td>
+                                    <td class="home-displayData">
+                                        @if ( $user->role == 2)
+                                            Administrator
+                                        @else
+                                            Korisnik
+                                        @endif
+                                    </td>
+                                    <td class="home-displayData">
+                                        {{  $user->updated_at->format("d/m/y H:i") }}
+                                    </td>
                                     <td>
                                         <a href="{{ route('getUserForEdit', $user->id) }}" target="_blank">Edit</a>
                                     </td>

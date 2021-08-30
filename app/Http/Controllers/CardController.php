@@ -80,15 +80,12 @@ class CardController extends Controller
 
             while (strlen($card->id) < 5) 
                 $card->id =  '0' . $card->id;
-            $card->vazi_do = Carbon::parse($card->vazi_do)->format('d/m/y');
+                $card->vazi_do = Carbon::parse($card->vazi_do)->format('d/m/y');
 
-            if (auth()->user() != null && auth()->user()->role > 0) {
                 $dodao_korisnik = DB::table('users')->where('id', $card->dodao_korisnik)->first();
                 $card->dodao_korisnik = $dodao_korisnik->name;
                 return view("viewProfile")->with('card', $card);
-            }
-            
-            return view("viewProfile")->with('card', $card);
+
         } else {
             return view("notFound");
         }
@@ -153,6 +150,7 @@ class CardController extends Controller
                         'duznost' => $request->input('editCard-duty'),
                         'vazi_do' => $request->input('editCard-validUntil'),
                         'slika' => $name,
+                        'updated_at' => Carbon::now()
                         ]);
                 $request->editCard_image->storeAs('slikeKorisnika', $name, 'public');
 
@@ -164,6 +162,7 @@ class CardController extends Controller
                         'medij' => $request->input('editCard-medium'),
                         'duznost' => $request->input('editCard-duty'),
                         'vazi_do' => $request->input('editCard-validUntil'),
+                        'updated_at' => Carbon::now()
                         ]);
             }
             
