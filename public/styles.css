@@ -226,3 +226,11 @@
 *:focus {
     outline: none;
 }
+#downloadQRButton {
+    border-radius: 3px;
+    background-color: #45b6f3;
+    font-size: 16px;
+    color: white;
+    padding: 5px;
+    text-decoration: none;
+}

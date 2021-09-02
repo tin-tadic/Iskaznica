@@ -53,3 +53,5 @@ Route::post('/edit-iskaznice/{brIskaznice}', [CardController::class, 'editProfil
     ->middleware(['auth', 'isDisabled', 'changedPassword'])->name('saveEditProfile');
 Route::post('/izbrisi-iskaznicu/{brIskaznice}', [CardController::class, 'deleteProfile'])
     ->middleware(['auth', 'isDisabled', 'changedPassword'])->name('deleteProfile');
+Route::get('/downloadQRCode/{id}', [CardController::class, 'downloadQRCode'])
+    ->name('downloadQRCode');

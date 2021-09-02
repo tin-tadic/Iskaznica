@@ -10,6 +10,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Response;
 
 
 class CardController extends Controller
@@ -70,7 +71,7 @@ class CardController extends Controller
         QrCode::generate('localhost:8000/viewProfile/' . $newCardId->ID_iskaznice, '../public/storage/QR_kodovi/' . $qr_name);
         DB::table('cards')->where('id', $newCardId->id)->update(['qr_kod' => $qr_name]);
 
-        return redirect()->route('viewProfile', ['brIskaznice' => $newCardId->ID_iskaznice]);
+        return redirect()->route('viewProfile', ['brIskaznice' => $newCardId->ID_iskaznice])->with('info', 'Kliknite na sliku kako biste lako kopirali ili downloadali QR kod!');
     }
 
     public function dohvatiProfil($brIskaznice) {
@@ -190,7 +191,11 @@ class CardController extends Controller
             return redirect()->route('home')->with('error', 'Iskaznica ne postoji.');
         }
 
+    }
 
+    public function downloadQRCode($id) {
+        $filepath = 'storage/QR_kodovi/' . $id;
+        return Response::download($filepath);
     }
 
 }

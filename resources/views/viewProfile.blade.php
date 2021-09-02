@@ -19,6 +19,7 @@
                 <div class="modal-body centerMe">
                     <img id="QRcodeImg" src="/storage/QR_kodovi/{{ $card->qr_kod }}" alt="kod ne postoji">
                     <p>{{ $card->ime_prezime }}</p>
+                    <a id="downloadQRButton" href="{{ route('downloadQRCode', ['id' => $card->qr_kod]) }}">Download Code</a>
                 </div>
             </div>
             </div>
