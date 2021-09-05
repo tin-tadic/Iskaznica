@@ -55,7 +55,6 @@ class CardController extends Controller
         $name = auth()->user()->id . '-' . Str::random(15) . '-' . $request->addCard_image->getClientOriginalName();
 
         $newCardId = Card::create([
-            'dodao_korisnik' => auth()->user()->id,
             'ime_prezime' => $request->input('addCard-name'),
             'medij' => $request->input('addCard-medium'),
             'duznost' => $request->input('addCard-duty'),
@@ -83,8 +82,8 @@ class CardController extends Controller
                 $card->id =  '0' . $card->id;
                 $card->vazi_do = Carbon::parse($card->vazi_do)->format('d/m/y');
 
-                $dodao_korisnik = DB::table('users')->where('id', $card->dodao_korisnik)->first();
-                $card->dodao_korisnik = $dodao_korisnik->name;
+                $dodao_korisnik = DB::table('users')->where('id', $card->created_by)->first();
+                $card->created_by = $dodao_korisnik->name;
                 return view("viewProfile")->with('card', $card);
 
         } else {
@@ -136,36 +135,29 @@ class CardController extends Controller
                 return redirect()->back()->withErrors($validator);
             }
 
+            $card = Card::where('ID_iskaznice', $brIskaznice)->first();
+
             // If there is an image change, upload the new one and delete the old one.
             // Otherwise just change the other info
             if($request->editCard_image) {
-                $old_name = DB::table('cards')->where('ID_iskaznice', $brIskaznice)->value('slika');
-                Storage::delete('/public/slikeKorisnika/' . $old_name);
-
+                Storage::delete('/public/slikeKorisnika/' . $card->slika);
                 $name = auth()->user()->id . '-' . Str::random(15) . '-' . $request->editCard_image->getClientOriginalName();
-                DB::table('cards')->where('ID_iskaznice', $brIskaznice)
-                    ->update([
-                        'dodao_korisnik' => auth()->user()->id,
-                        'ime_prezime' => $request->input('editCard-name'),
-                        'medij' => $request->input('editCard-medium'),
-                        'duznost' => $request->input('editCard-duty'),
-                        'vazi_do' => $request->input('editCard-validUntil'),
-                        'slika' => $name,
-                        'updated_at' => Carbon::now()
-                        ]);
                 $request->editCard_image->storeAs('slikeKorisnika', $name, 'public');
 
+                $card->ime_prezime = $request->input('editCard-name');
+                $card->medij = $request->input('editCard-medium');
+                $card->duznost = $request->input('editCard-duty');
+                $card->vazi_do = $request->input('editCard-validUntil');
+                $card->slika = $name;
+                $card->updated_at = Carbon::now();
             } else {
-                DB::table('cards')->where('ID_iskaznice', $brIskaznice)
-                    ->update([
-                        'dodao_korisnik' => auth()->user()->id,
-                        'ime_prezime' => $request->input('editCard-name'),
-                        'medij' => $request->input('editCard-medium'),
-                        'duznost' => $request->input('editCard-duty'),
-                        'vazi_do' => $request->input('editCard-validUntil'),
-                        'updated_at' => Carbon::now()
-                        ]);
+                $card->ime_prezime = $request->input('editCard-name');
+                $card->medij = $request->input('editCard-medium');
+                $card->duznost = $request->input('editCard-duty');
+                $card->vazi_do = $request->input('editCard-validUntil');
+                $card->updated_at = Carbon::now();
             }
+            $card->save();
             
             return redirect()->route('viewProfile', ['brIskaznice' => $brIskaznice])->with('success', 'Promjene uspješno spremljene.');
         } else {
@@ -183,6 +175,7 @@ class CardController extends Controller
                 ->update([
                     'slika' => 'DELETED',
                     'qr_kod' => 'DELETED',
+                    'deleted_by' => auth()->user()->id
                     ]);
             Card::where('ID_iskaznice', $brIskaznice)->delete();
 

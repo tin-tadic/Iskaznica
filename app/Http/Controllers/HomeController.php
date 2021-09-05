@@ -104,9 +104,9 @@ class HomeController extends Controller
             case "card-byAddedBy":
                 if(strlen($searchFor) > 0 && is_numeric($searchFor)) {
                     if($request->searchForDeletedCards) {
-                        $cards = Card::where('dodao_korisnik', $searchFor)->withTrashed()->get();
+                        $cards = Card::where('created_by', $searchFor)->withTrashed()->get();
                     } else {
-                        $cards = Card::where('dodao_korisnik', $searchFor)->get();
+                        $cards = Card::where('created_by', $searchFor)->get();
                     }
                     
                     if (sizeof($cards) > 0) {
