@@ -15,8 +15,6 @@ class Iskaznice extends Migration
     {
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dodao_korisnik');
-            $table->foreign('dodao_korisnik')->references('id')->on('users');
             $table->string('ime_prezime');
             $table->string('medij');
             $table->string('duznost');
@@ -24,6 +22,12 @@ class Iskaznice extends Migration
             $table->string('slika');
             $table->string('qr_kod');
             $table->uuid('ID_iskaznice')->unique();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users');
             $table->softDeletes();
             $table->timestamps();
         });

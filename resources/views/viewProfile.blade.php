@@ -79,7 +79,7 @@
             @if (Auth::user() && Auth::user()->role > 0)
                 <div class="centerMe">
                     <p class="poddioIskaznice">Dodao Korisnik</p>
-                    <p class="vrijednost" id="vazenje">{{ $card->dodao_korisnik }}</p>
+                    <p class="vrijednost" id="vazenje">{{ $card->created_by }}</p>
                 </div>
             @endif
         </div>

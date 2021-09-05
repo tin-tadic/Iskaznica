@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
         "nesbot/carbon": "^2.48",
-        "simplesoftwareio/simple-qrcode": "~4"
+        "simplesoftwareio/simple-qrcode": "~4",
+        "wildside/userstamps": "^2.1"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
