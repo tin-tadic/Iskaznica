@@ -33,14 +33,14 @@ class HomeController extends Controller
                 return redirect()->route('home')->with('warning', 'Nisu pronađeni korisnici sa takvim ili sličnim emailom.');
             
             case "user-byRole":
-                if(is_numeric($searchFor) && $searchFor >=0 && $searchFor < 3) {
+                if(is_numeric($searchFor) && $searchFor >=1 && $searchFor <= 2) {
                     $users = User::where('role', $searchFor)->get();
                     if (sizeof($users) > 0) {
                         return redirect()->route('home')->with('users', $users);
                     }
                     return redirect()->route('home')->with('warning', 'Nisu pronađeni korisnici sa tim ovlastima.');
                 } else {
-                    return redirect()->back()->withInput()->with('error', 'Za pretragu po ovlastima unesite broj od 0 do 2!');
+                    return redirect()->back()->withInput()->with('error', 'Za pretragu po ovlastima unesite broj od 1 do 2!');
                 }
             
             

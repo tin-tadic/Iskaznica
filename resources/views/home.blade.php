@@ -106,11 +106,13 @@
                         <table class="home-displayDataTable">
                             <thead>
                                 <td>Ime</td>
-                                <td>ID administratora</td>
+                                <td>ID korisnika</td>
                                 <td>Email</td>
                                 <td>Nivo dozvola korisnika</td>
                                 <td>Zadnji put mijenjano</td>
-                                <td>Edit</td>
+                                @if( Auth::user() && Auth::user()->role > 1 )
+                                    <td>Edit</td>
+                                @endif
                             </thead>
                             @foreach ($users as $user)
                                 <tr>
@@ -118,7 +120,7 @@
                                     <td class="home-displayData">{{ $user->id }}</td>
                                     <td class="home-displayData">{{ $user->email }}</td>
                                     <td class="home-displayData">
-                                        @if ( $user->role == 2)
+                                        @if ( $user->role == 2 )
                                             Administrator
                                         @else
                                             Korisnik
@@ -127,9 +129,11 @@
                                     <td class="home-displayData">
                                         {{  $user->updated_at->format("d/m/y H:i") }}
                                     </td>
-                                    <td>
-                                        <a href="{{ route('getUserForEdit', $user->id) }}" target="_blank">Edit</a>
-                                    </td>
+                                    @if( Auth::user() && Auth::user()->role > 1 )
+                                        <td>
+                                            <a href="{{ route('getUserForEdit', $user->id) }}" target="_blank">Edit</a>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </table>
