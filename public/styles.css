@@ -5,6 +5,9 @@
 .navLink:hover {
     text-decoration: none;
 }
+#navLogo {
+    height: 50px;
+}
 
 #messages-div {
     width: 30%;
